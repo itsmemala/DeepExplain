@@ -73,6 +73,7 @@ class AttributionMethod(object):
     Attribution method base class
     """
     def __init__(self, T, X, session, keras_learning_phase=None):
+        print("We're inside the AttributionMethod init.")
         self.T = T  # target Tensor
         self.X = X  # input Tensor
         self.Y_shape = [None,] + T.get_shape().as_list()[1:]
@@ -325,6 +326,7 @@ class EpsilonLRP(GradientBasedMethod):
     eps = None
 
     def __init__(self, T, X, session, keras_learning_phase, epsilon=1e-4):
+        print("We're inside the ELRP init.")
         assert epsilon > 0.0, 'LRP epsilon must be greater than zero'
         global eps
         eps = epsilon
@@ -610,6 +612,7 @@ class DeepExplain(object):
             raise RuntimeError('T must be a Tensorflow Tensor object')
 
         logging.info('DeepExplain: running "%s" explanation method (%d)' % (self.method, method_flag))
+        print("We're inside the get_explain().")
         self._check_ops()
         _GRAD_OVERRIDE_CHECKFLAG = 0
 
@@ -618,6 +621,7 @@ class DeepExplain(object):
                                        self.session,
                                        keras_learning_phase=self.keras_phase_placeholder,
                                        **kwargs)
+        print("Obtained explainer method.")
 
         if issubclass(_ENABLED_METHOD_CLASS, GradientBasedMethod) and _GRAD_OVERRIDE_CHECKFLAG == 0:
             warnings.warn('DeepExplain detected you are trying to use an attribution method that requires '
@@ -629,6 +633,7 @@ class DeepExplain(object):
         return method
 
     def explain(self, method, T, X, xs, ys=None, batch_size=None, **kwargs):
+        print("We're inside the explain().")
         explainer = self.get_explainer(method, T, X, **kwargs)
         return explainer.run(xs, ys, batch_size)
 
